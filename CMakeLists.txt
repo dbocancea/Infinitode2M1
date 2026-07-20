@@ -1,19 +1,22 @@
 cmake_minimum_required(VERSION 3.7)
 
-# Nom de ton nouveau projet
+# 1. Déclaration du projet
 project(Infinitode2D LANGUAGES CXX)
 
-# Recherche de la bibliothèque SDL2 sur ton système
+# 2. Recherche de SDL2
 find_package(SDL2 REQUIRED)
 
-# Définition de l'exécutable (Remplace main.cpp par le nom réel de ton fichier si besoin)
-add_executable(${PROJECT_NAME} src/main.cpp)
+# 3. Définition de l'exécutable avec les bons chemins vers le dossier src/
+add_executable(${PROJECT_NAME} 
+    src/main.cpp 
+    src/Grid.cpp 
+    src/GameRender.cpp
+)
 
-# Inclusion des dossiers de headers de SDL2 (pour enlever les squiggles et compiler)
+# 4. Configuration de l'exécutable
 target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS})
-
-# Définition pour éviter les conflits avec le main de SDL sur certaines plateformes
 target_compile_definitions(${PROJECT_NAME} PRIVATE "SDL_MAIN_HANDLED")
-
-# Liaison (Link) de ton exécutable avec les fichiers binaires de SDL2
 target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES})
+
+# 5. Copie du fichier de carte (Attention : ton fichier s'appelle chem.txt et est dans sprites/)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/sprites/chem.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)

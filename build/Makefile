@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /adhome/d/db/dbocancea/ProjetInfinitode
+CMAKE_SOURCE_DIR = /adhome/d/db/dbocancea/ProjetInfinitode/Infinitode2M1
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /adhome/d/db/dbocancea/ProjetInfinitode/build
+CMAKE_BINARY_DIR = /adhome/d/db/dbocancea/ProjetInfinitode/Infinitode2M1/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /adhome/d/db/dbocancea/ProjetInfinitode/build/CMakeFiles /adhome/d/db/dbocancea/ProjetInfinitode/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /adhome/d/db/dbocancea/ProjetInfinitode/Infinitode2M1/build/CMakeFiles /adhome/d/db/dbocancea/ProjetInfinitode/Infinitode2M1/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /adhome/d/db/dbocancea/ProjetInfinitode/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /adhome/d/db/dbocancea/ProjetInfinitode/Infinitode2M1/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -129,6 +129,54 @@ Infinitode2D/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infinitode2D.dir/build.make CMakeFiles/Infinitode2D.dir/build
 .PHONY : Infinitode2D/fast
 
+src/GameRender.o: src/GameRender.cpp.o
+.PHONY : src/GameRender.o
+
+# target to build an object file
+src/GameRender.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infinitode2D.dir/build.make CMakeFiles/Infinitode2D.dir/src/GameRender.cpp.o
+.PHONY : src/GameRender.cpp.o
+
+src/GameRender.i: src/GameRender.cpp.i
+.PHONY : src/GameRender.i
+
+# target to preprocess a source file
+src/GameRender.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infinitode2D.dir/build.make CMakeFiles/Infinitode2D.dir/src/GameRender.cpp.i
+.PHONY : src/GameRender.cpp.i
+
+src/GameRender.s: src/GameRender.cpp.s
+.PHONY : src/GameRender.s
+
+# target to generate assembly for a file
+src/GameRender.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infinitode2D.dir/build.make CMakeFiles/Infinitode2D.dir/src/GameRender.cpp.s
+.PHONY : src/GameRender.cpp.s
+
+src/Grid.o: src/Grid.cpp.o
+.PHONY : src/Grid.o
+
+# target to build an object file
+src/Grid.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infinitode2D.dir/build.make CMakeFiles/Infinitode2D.dir/src/Grid.cpp.o
+.PHONY : src/Grid.cpp.o
+
+src/Grid.i: src/Grid.cpp.i
+.PHONY : src/Grid.i
+
+# target to preprocess a source file
+src/Grid.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infinitode2D.dir/build.make CMakeFiles/Infinitode2D.dir/src/Grid.cpp.i
+.PHONY : src/Grid.cpp.i
+
+src/Grid.s: src/Grid.cpp.s
+.PHONY : src/Grid.s
+
+# target to generate assembly for a file
+src/Grid.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infinitode2D.dir/build.make CMakeFiles/Infinitode2D.dir/src/Grid.cpp.s
+.PHONY : src/Grid.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -162,6 +210,12 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Infinitode2D"
+	@echo "... src/GameRender.o"
+	@echo "... src/GameRender.i"
+	@echo "... src/GameRender.s"
+	@echo "... src/Grid.o"
+	@echo "... src/Grid.i"
+	@echo "... src/Grid.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

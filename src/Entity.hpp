@@ -3,13 +3,14 @@
 #include<iostream>
 #include<string>
 #include <fstream>
-
+#include <utility>
+#include <vector>
 using namespace std;
 
 class Entity
 {
     public:
-
+        pair<float , float> cord;
 };
 
 #endif
