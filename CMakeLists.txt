@@ -11,6 +11,7 @@ add_executable(${PROJECT_NAME}
     src/main.cpp 
     src/Grid.cpp 
     src/GameRender.cpp
+    src/Enemy.cpp
 )
 
 # 4. Configuration de l'exécutable

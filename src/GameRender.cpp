@@ -51,3 +51,13 @@ void GameRender::GridRender(SDL_Renderer* renderer)
      SDL_RenderPresent(renderer);
 }
 
+void GameRender::EntityRender(Enemy e , SDL_Renderer* renderer)
+{
+   SDL_Rect filledRect = {
+        static_cast<int>(e.cord.second * 100+25),
+        static_cast<int>(e.cord.first * 100+25),
+        static_cast<int>(e.taille.first),
+        static_cast<int>(e.taille.second)};    
+        SDL_SetRenderDrawColor(renderer, 238, 130, 238, 255);
+    SDL_RenderFillRect(renderer, &filledRect);
+}

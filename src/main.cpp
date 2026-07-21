@@ -54,8 +54,8 @@
 #include <vector>
 #include "Grid.hpp"
 #include "GameRender.hpp"
-
-#include "Entity.hpp" 
+#include "Enemy.hpp" 
+#include <unistd.h>
 
 int main(int argc, char* argv[])
 {
@@ -89,8 +89,10 @@ int main(int argc, char* argv[])
         cout << "( " << maGrille.cord_chemain[i].first << " , " << maGrille.cord_chemain[i].second << " )" << endl;
     GameRender gameRender(maGrille, tours, ennemis);
 
+    Enemy e( 50 , 50 , 100 , 0.05f , maGrille.start);
     bool running = true;
     SDL_Event event;
+    int parc = 0;
 
     while (running)
     {
@@ -101,7 +103,36 @@ int main(int argc, char* argv[])
             
         }
 
+        if (parc < maGrille.cord_chemain.size())
+        {
+            auto target = maGrille.cord_chemain[parc];
+
+            float diffY = target.first  - e.cord.first;  // Ligne
+            float diffX = target.second - e.cord.second; // Colonne
+
+            if (abs(diffX) < 0.05f && abs(diffY) < 0.05f)
+            {
+                e.cord = target; 
+                parc++;          
+            }
+            else
+            {
+                int dirX = (diffX > 0) - (diffX < 0);
+                int dirY = (diffY > 0) - (diffY < 0);
+                
+                e.Move(dirX, dirY);
+            }
+        }
+        else
+        {
+            std::cout << "L'ennemi a atteint la fin !" << std::endl;
+            running = false; 
+        }
+
         gameRender.GridRender(renderer);
+        gameRender.EntityRender(e, renderer);
+        SDL_RenderPresent(renderer);
+
         SDL_Delay(16);
     }
     SDL_DestroyRenderer(renderer);

@@ -2,7 +2,7 @@
 #define GAMERENDER_HPP
 #include<SDL.h>
 #include "Grid.hpp"
-#include "Entity.hpp"
+#include "Enemy.hpp"
 #include <vector>
 #include <map>
 class GameRender
@@ -15,7 +15,7 @@ public:
     vector <Entity> Enemys;
     GameRender(Grid g , vector <Entity> Towers , vector <Entity> Enemys);
     void GridRender(SDL_Renderer* renderer);
-    void EntityRender(Entity e);
+    void EntityRender(Enemy e , SDL_Renderer* renderer);
 };
 
 #endif

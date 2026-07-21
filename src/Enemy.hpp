@@ -3,12 +3,13 @@
 
 #include "Entity.hpp"
 
-class Enemy : Entity
+class Enemy : public Entity
 {
-    float hp;
-    float speed;
-
-    void Move();
+    public:
+        float hp;
+        float speed;
+        Enemy(float h , float l , float hp , float speed , pair<float , float> start);
+        void Move(int dirx , int diry);
 };
 
 #endif

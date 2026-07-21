@@ -11,6 +11,7 @@ class Entity
 {
     public:
         pair<float , float> cord;
+        pair<float , float> taille;
 };
 
 #endif
