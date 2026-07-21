@@ -201,6 +201,30 @@ src/Grid.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infinitode2D.dir/build.make CMakeFiles/Infinitode2D.dir/src/Grid.cpp.s
 .PHONY : src/Grid.cpp.s
 
+src/Projectile.o: src/Projectile.cpp.o
+.PHONY : src/Projectile.o
+
+# target to build an object file
+src/Projectile.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infinitode2D.dir/build.make CMakeFiles/Infinitode2D.dir/src/Projectile.cpp.o
+.PHONY : src/Projectile.cpp.o
+
+src/Projectile.i: src/Projectile.cpp.i
+.PHONY : src/Projectile.i
+
+# target to preprocess a source file
+src/Projectile.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infinitode2D.dir/build.make CMakeFiles/Infinitode2D.dir/src/Projectile.cpp.i
+.PHONY : src/Projectile.cpp.i
+
+src/Projectile.s: src/Projectile.cpp.s
+.PHONY : src/Projectile.s
+
+# target to generate assembly for a file
+src/Projectile.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infinitode2D.dir/build.make CMakeFiles/Infinitode2D.dir/src/Projectile.cpp.s
+.PHONY : src/Projectile.cpp.s
+
 src/Tower.o: src/Tower.cpp.o
 .PHONY : src/Tower.o
 
@@ -267,6 +291,9 @@ help:
 	@echo "... src/Grid.o"
 	@echo "... src/Grid.i"
 	@echo "... src/Grid.s"
+	@echo "... src/Projectile.o"
+	@echo "... src/Projectile.i"
+	@echo "... src/Projectile.s"
 	@echo "... src/Tower.o"
 	@echo "... src/Tower.i"
 	@echo "... src/Tower.s"

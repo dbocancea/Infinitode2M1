@@ -3,6 +3,8 @@
 
 #include "Entity.hpp"
 #include "Enemy.hpp"
+#include <memory>
+#include <algorithm>
 class Tower : public Entity
 {
 public:
@@ -11,8 +13,8 @@ public:
     float attack_speed;
 
     Tower(float range , float attack , float attack_speed , pair<float , float> cord , float h , float l );
-    void Find(vector <Enemy> enemys);
-    void Attack();
+    int Find(const std::vector<Enemy>& enemies);
+    void Attack(Enemy e);
 };
 
 #endif

@@ -1,53 +1,3 @@
-// #include <SDL.h>
-// #include <iostream>
-
-// SDL_Window* pWindow = nullptr;
-// SDL_Surface* win_surf = nullptr;
-// SDL_Surface* plancheSprites = nullptr;
-
-// int main ()
-// {
-//     if (SDL_Init(SDL_INIT_VIDEO) != 0 )
-//     {
-// 		std::cerr <<"Echec de l'initialisation de la SDL "<<SDL_GetError() << std::endl;
-// 		return 1;
-//     }
-
-//     pWindow = SDL_CreateWindow("Infinitode", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 680, 680, SDL_WINDOW_SHOWN);
-//     if (!pWindow) {
-//         std::cerr << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
-//         return 1;
-//     }
-
-//     win_surf = SDL_GetWindowSurface(pWindow);
-
-// 	plancheSprites = SDL_LoadBMP("../sprites/binfinitode_map_sprite.bmp");
-//     if (!plancheSprites) {
-//         std::cerr << "SDL_LoadBMP Error: " << SDL_GetError() << std::endl;
-//         return 1;
-//     }
-
-//     SDL_Rect src_bg = { 0, 0, plancheSprites->w, plancheSprites->h };
-//     SDL_Rect bg     = { 0, 0, 680, 680 };
-
-//     SDL_SetColorKey(plancheSprites, false, 0);
-//     SDL_BlitScaled(plancheSprites, &src_bg, win_surf, &bg);
-//     SDL_UpdateWindowSurface(pWindow);
-
-//     bool running = true;
-//     SDL_Event e;
-//     while (running) {
-//         while (SDL_PollEvent(&e)) {
-//             if (e.type == SDL_QUIT) running = false;
-//         }
-//     }
-
-//     SDL_FreeSurface(plancheSprites);
-//     SDL_DestroyWindow(pWindow);
-//     SDL_Quit();
-//     return 0;
-// }
-
 #include <SDL.h>
 #include <iostream>
 #include <vector>
@@ -55,9 +5,10 @@
 #include "GameRender.hpp"
 #include "Enemy.hpp"
 #include <unistd.h>
-
+#include "Projectile.hpp"
 int main(int argc, char *argv[])
 {
+    Uint32 startTime = SDL_GetTicks();
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
     {
         std::cerr << "Erreur SDL_Init: " << SDL_GetError() << std::endl;
@@ -84,82 +35,88 @@ int main(int argc, char *argv[])
     }
 
     Grid maGrille("../sprites/chem.txt");
-    std::vector<Entity> tours;
-    std::vector<Entity> ennemis;
+    vector<Tower> tours;
+    vector<Enemy> ennemis;
+    vector<Projectile> projectiles;
     maGrille.CalculerChaiman();
-    for (int i = 0; i < maGrille.cord_chemain.size(); i++)
-        cout << "( " << maGrille.cord_chemain[i].first << " , " << maGrille.cord_chemain[i].second << " )" << endl;
     GameRender gameRender(maGrille, tours, ennemis);
 
-    Enemy e(50, 50, 100, 0.05f, maGrille.start);
-    Tower t(5, 10, 1, {1 , 4}, 75 , 75);
+    Enemy e(50, 50, 100, 0.01f, maGrille.start);
+
+    vector<Enemy> enemys;
+    enemys.push_back(e);
+
+    Tower t(100, 10, 1, {1, 4}, 75, 75);
+    tours.push_back(t);
     bool running = true;
     SDL_Event event;
-    int parc = 0;
+    vector<int> parc = {0};
     int time;
     while (running)
-    {
+    {   
+        Uint32 elapsed = SDL_GetTicks() - startTime;
+        time = elapsed / 1000;
         while (SDL_PollEvent(&event))
         {
             if (event.type == SDL_QUIT)
                 running = false;
         }
-
-        if (parc < maGrille.cord_chemain.size())
+        for (int i = 0; i < enemys.size(); i++)
         {
-            auto target = maGrille.cord_chemain[parc];
-
-            float diffY = target.first - e.cord.first;   // Ligne
-            float diffX = target.second - e.cord.second; // Colonne
-
-            if (abs(diffX) < 0.05f && abs(diffY) < 0.05f)
+            if (parc[i] < maGrille.cord_chemain.size())
             {
-                e.cord = target;
-                parc++;
+                auto target = maGrille.cord_chemain[parc[i]];
+
+                float diffY = target.first - enemys[i].cord.first;   // Ligne
+                float diffX = target.second - enemys[i].cord.second; // Colonne
+
+                if (abs(diffX) < 0.05f && abs(diffY) < 0.05f)
+                {
+                    enemys[i].cord = target;
+                    parc[i]++;
+                }
+                else
+                {
+                    int dirX = (diffX > 0) - (diffX < 0);
+                    int dirY = (diffY > 0) - (diffY < 0);
+
+                    enemys[i].Move(dirX, dirY);
+                }
             }
             else
             {
-                int dirX = (diffX > 0) - (diffX < 0);
-                int dirY = (diffY > 0) - (diffY < 0);
-
-                e.Move(dirX, dirY);
+                cout << "L'ennemi a atteint la fin !" << endl;
+                running = false;
             }
         }
-        else
+
+        int index = t.Find(enemys);
+        if (index != -1)
         {
-            std::cout << "L'ennemi a atteint la fin !" << std::endl;
-            running = false;
+            Projectile p(t.cord, enemys[index].cord, 0.05f, {20, 20} , index);
+            projectiles.push_back(p);
         }
 
+        for (int i = 0; i < projectiles.size(); i++)
+        {
+            projectiles[i].Move();
+            projectiles[i].UpdateCord(enemys[ projectiles[i].index].cord);
+        }
+            
+
         gameRender.GridRender(renderer);
-        gameRender.EntityRender(e, renderer);
-        gameRender.TowerRender(t , renderer);
-        // float cx = 500.0f;
-        // float cy = 500.0f;
-        // float r = 150.0f;
 
-        // SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // blanc opaque
+        for (auto &enemy : enemys)
+            gameRender.EntityRender(enemy, renderer);
 
-        // const float pas = 0.1f; // pas en radians
-        // float prevX = cx + r * cos(0.0f);
-        // float prevY = cy + r * sin(0.0f);
+        for (auto &tw : tours)
+            gameRender.TowerRender(tw, renderer);
 
-        // for (float theta = pas; theta <= 2 * M_PI + pas; theta += pas)
-        // {
-        //     float x = cx + r * cos(theta);
-        //     float y = cy + r * sin(theta);
-
-        //     SDL_RenderDrawLine(renderer,
-        //                        static_cast<int>(prevX), static_cast<int>(prevY),
-        //                        static_cast<int>(x), static_cast<int>(y));
-
-        //     prevX = x;
-        //     prevY = y;
-        // }
+        for (auto &proj : projectiles) 
+            gameRender.ProjectileRender(proj, renderer);
 
         SDL_RenderPresent(renderer);
-
-        SDL_Delay(16);
+        SDL_Delay(32);
     }
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

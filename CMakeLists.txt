@@ -13,6 +13,7 @@ add_executable(${PROJECT_NAME}
     src/GameRender.cpp
     src/Enemy.cpp
     src/Tower.cpp
+    src/Projectile.cpp
 )
 
 # 4. Configuration de l'exécutable
