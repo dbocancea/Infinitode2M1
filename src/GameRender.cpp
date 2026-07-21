@@ -61,3 +61,14 @@ void GameRender::EntityRender(Enemy e , SDL_Renderer* renderer)
         SDL_SetRenderDrawColor(renderer, 238, 130, 238, 255);
     SDL_RenderFillRect(renderer, &filledRect);
 }
+
+void GameRender::TowerRender(Tower t , SDL_Renderer* renderer)
+{
+   SDL_Rect filledRect = {
+        static_cast<int>(t.cord.first  * 100 + (100 - t.taille.second) / 2),
+        static_cast<int>(t.cord.second * 100 + (100 - t.taille.first)  / 2),
+        static_cast<int>(t.taille.first),
+        static_cast<int>(t.taille.second)};    
+        SDL_SetRenderDrawColor(renderer, 51, 0, 102, 255);
+    SDL_RenderFillRect(renderer, &filledRect);
+}

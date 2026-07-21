@@ -1,5 +1,5 @@
 #include"Enemy.hpp"
-
+Enemy::Enemy(){}
 Enemy::Enemy(float h, float l, float hp, float speed, std::pair<float, float> start)
     : hp(hp), speed(speed)
 {

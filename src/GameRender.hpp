@@ -3,6 +3,7 @@
 #include<SDL.h>
 #include "Grid.hpp"
 #include "Enemy.hpp"
+#include "Tower.hpp"
 #include <vector>
 #include <map>
 class GameRender
@@ -16,6 +17,7 @@ public:
     GameRender(Grid g , vector <Entity> Towers , vector <Entity> Enemys);
     void GridRender(SDL_Renderer* renderer);
     void EntityRender(Enemy e , SDL_Renderer* renderer);
+    void TowerRender(Tower e , SDL_Renderer* renderer);
 };
 
 #endif

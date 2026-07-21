@@ -22,7 +22,7 @@ class Grid
         void CalculerChaiman();
         Grid( string file );
         bool loadFromFile(string load);
-        
+        vector < pair <pair <float , float> , bool >> towers;
 };
 
 #endif

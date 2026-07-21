@@ -6,6 +6,7 @@
 class Enemy : public Entity
 {
     public:
+        Enemy();
         float hp;
         float speed;
         Enemy(float h , float l , float hp , float speed , pair<float , float> start);

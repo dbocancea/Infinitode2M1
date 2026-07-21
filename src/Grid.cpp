@@ -28,6 +28,8 @@ bool Grid::loadFromFile(string file)
         for (int j = 0; j < 10; j++)
         {
             this->map[i][j] = line[j];
+            if (line[j] == this->tour)
+                this->towers.push_back({{i, j}, 0});
             if (line[j] == this->depart)
                 this->start = pair<int, int>{i, j};
             if (line[j] == this->arrive)
@@ -43,7 +45,7 @@ void Grid::CalculerChaiman()
     cord_chemain.clear();
 
     std::vector<std::vector<bool>> visited(10, std::vector<bool>(10, false));
-    std::pair<int,int> current = this->start; // {i, j} = {ligne, colonne}
+    std::pair<int, int> current = this->start; // {i, j} = {ligne, colonne}
 
     while (current != this->end)
     {
@@ -51,12 +53,11 @@ void Grid::CalculerChaiman()
         visited[current.first][current.second] = true;
 
         // 4 directions : haut, bas, gauche, droite
-        static const std::array<std::pair<int,int>, 4> dirs = {
-            std::pair<int,int>{-1, 0}, {1, 0}, {0, -1}, {0, 1}
-        };
+        static const std::array<std::pair<int, int>, 4> dirs = {
+            std::pair<int, int>{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
         bool found = false;
-        for (const auto& d : dirs)
+        for (const auto &d : dirs)
         {
             int ni = current.first + d.first;
             int nj = current.second + d.second;
@@ -83,5 +84,5 @@ void Grid::CalculerChaiman()
         }
     }
 
-    cord_chemain.push_back(this->end); // 
+    cord_chemain.push_back(this->end); //
 }
