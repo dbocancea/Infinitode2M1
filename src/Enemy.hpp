@@ -6,10 +6,11 @@
 class Enemy : public Entity
 {
     public:
-        Enemy();
         float hp;
         float speed;
-        Enemy(float h , float l , float hp , float speed , pair<float , float> start);
+        int id;
+        static int next_id;
+        Enemy(float h , float l , float hp , float speed , pair<float , float> start );
         void Move(int dirx , int diry);
         bool operator==(const Enemy& other) const {
         // Compare unique ID if you have one, or coordinates/properties:

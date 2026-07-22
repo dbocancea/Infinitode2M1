@@ -1,6 +1,6 @@
 #include "Projectile.hpp"
 
-Projectile::Projectile(pair<float, float> cord, pair<float, float> target, float speed, pair<float, float> taille, int index , Tower t ) : speed(speed), index(index) , t(t)
+Projectile::Projectile(pair<float, float> cord, pair<float, float> target, float speed, pair<float, float> taille, int index , Tower t ) : speed(speed), targetId(index) , t(t)
 {
     this->cord = cord;
     this->target = target;
@@ -23,6 +23,6 @@ void Projectile::Move(bool *touch)
     cord.first += dirY * speed;
     cord.second += dirX * speed;
 
-    if (abs(diffX) < 0.05f && abs(diffY) < 0.05f)
+    if (abs(diffX) < 0.5f && abs(diffY) < 0.5f)
         *touch = true;
 }

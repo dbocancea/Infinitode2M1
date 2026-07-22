@@ -36,12 +36,15 @@ int main(int argc, char *argv[])
     }
 
     Grid maGrille("../sprites/chem.txt");
+    maGrille.CalculerChaiman();
+
     vector<Tower> tours;
     vector<Enemy> ennemis;
     vector<Projectile> projectiles;
-    maGrille.CalculerChaiman();
-    GameRender gameRender(maGrille, tours, ennemis);
     vector<Enemy> enemys;
+
+    GameRender gameRender(maGrille, tours, ennemis);
+
     bool running = true;
     SDL_Event event;
     vector<int> parc = {0};
@@ -60,22 +63,25 @@ int main(int argc, char *argv[])
             if (event.type == SDL_QUIT)
                 running = false;
         }
+
         bool creer_tour = false;
         input.GestionClavier(&running, &creer_tour);
+
         if (creer_tour)
         {
-            for( int h = 0; h<maGrille.towers.size() ; h++ )
+            for (int h = 0; h < maGrille.towers.size(); h++)
             {
-                if( (input.player.first == maGrille.towers[h].first.first) && 
+                if ((input.player.first == maGrille.towers[h].first.first) &&
                     (input.player.second == maGrille.towers[h].first.second) &&
                     !maGrille.towers[h].second)
                 {
-                    Tower t(5, 10, 2, input.player, 75, 75);
+                    Tower t(2, 10, 2, input.player, 75, 75);
+                    maGrille.towers[h].second = true;
                     tours.push_back(t);
                 }
             }
-            
         }
+
         for (int i = 0; i < enemys.size(); i++)
         {
             if (parc[i] < maGrille.cord_chemain.size())
@@ -104,44 +110,64 @@ int main(int argc, char *argv[])
                 running = false;
             }
         }
-        if ((time % 2 == 0) && (time != second_time))
+
+        if ((time % 10 == 0) && (time != second_time))
         {
-            Enemy en(50, 50, 100, 0.05f, maGrille.start);
+            Enemy en(50, 50, 100, 0.01f, maGrille.start);
             enemys.push_back(en);
             parc.push_back(0);
         }
+
         for (auto &tw : tours)
         {
             int index = tw.Find(enemys);
             if (index != -1 && (time % 2 == 0) && (time != second_time))
             {
-                Projectile p(tw.cord, enemys[index].cord, 0.05f, {20, 20}, index , tw);
+                Projectile p(tw.cord, enemys[index].cord, 0.05f, {20, 20}, enemys[index].id, tw);
                 projectiles.push_back(p);
             }
         }
 
         for (int i = 0; i < projectiles.size(); i++)
         {
-            bool touch = false;
-            auto it = find(enemys.begin(), enemys.end(), enemys[projectiles[i].index]);
+            auto it = find_if(enemys.begin(), enemys.end(),
+                              [&](const Enemy &e)
+                              { return e.id == projectiles[i].targetId; });
+
             if (it == enemys.end())
+            {
                 projectiles.erase(projectiles.begin() + i);
+                continue;
+            }
+
+            bool touch = false;
             projectiles[i].Move(&touch);
-            projectiles[i].UpdateCord(enemys[projectiles[i].index].cord);
+            projectiles[i].UpdateCord(it->cord);
+
             if (touch)
             {
-                enemys[projectiles[i].index].hp -= projectiles[i].t.attack;
+                it->hp -= projectiles[i].t.attack;
                 projectiles.erase(projectiles.begin() + i);
+                i--;
+                continue;
             }
         }
-
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); 
+        
+        // 2. ON EFFACE L'ÉCRAN (C'est la ligne qui vous manque !)
+        SDL_RenderClear(renderer);
         gameRender.GridRender(renderer);
 
-        for (int k = 0; k < enemys.size(); k++)
+        for (int k = 0; k < enemys.size();)
         {
             if (enemys[k].hp <= 0)
+            {
                 enemys.erase(enemys.begin() + k);
+                parc.erase(parc.begin() + k);
+                continue;
+            }
             gameRender.EntityRender(enemys[k], renderer);
+            k++;
         }
 
         for (auto &tw : tours)
@@ -149,9 +175,12 @@ int main(int argc, char *argv[])
 
         for (auto &proj : projectiles)
             gameRender.ProjectileRender(proj, renderer);
+
         gameRender.PlayerSelectRender(input, renderer);
         SDL_RenderPresent(renderer);
-        SDL_Delay(32);
+
+        SDL_Delay(16);
+
         if (time != second_time)
         {
             second_time = time;

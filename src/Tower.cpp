@@ -6,7 +6,7 @@ Tower::Tower(float range, float attack, float attack_speed, pair<float, float> c
     this->taille = {l, h};
     this->cord = cord;
 };
-int Tower::Find(const std::vector<Enemy>& enemies)
+int Tower::Find(const vector<Enemy>& enemies)
 {
     if (enemies.empty())
         return -1;
@@ -23,13 +23,8 @@ int Tower::Find(const std::vector<Enemy>& enemies)
         });
 
     if (distSq(*it) <= range * range)
-        return static_cast<int>(std::distance(enemies.begin(), it));
+        return static_cast<int>(distance(enemies.begin(), it));
     
         
     return -1; 
-}
-
-void Tower::Attack(Enemy e)
-{
-
 }

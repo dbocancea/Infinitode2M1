@@ -44,17 +44,16 @@ void Grid::CalculerChaiman()
 {
     cord_chemain.clear();
 
-    std::vector<std::vector<bool>> visited(10, std::vector<bool>(10, false));
-    std::pair<int, int> current = this->start; // {i, j} = {ligne, colonne}
+    vector<vector<bool>> visited(10, vector<bool>(10, false));
+    pair<int, int> current = this->start;
 
     while (current != this->end)
     {
         cord_chemain.push_back(current);
         visited[current.first][current.second] = true;
 
-        // 4 directions : haut, bas, gauche, droite
-        static const std::array<std::pair<int, int>, 4> dirs = {
-            std::pair<int, int>{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        static const array<pair<int, int>, 4> dirs = {
+            pair<int, int>{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
         bool found = false;
         for (const auto &d : dirs)
@@ -76,14 +75,14 @@ void Grid::CalculerChaiman()
             }
         }
 
-        if (!found) // chemin cassé ou mal formé dans le fichier
+        if (!found) 
         {
-            std::cerr << "Chemin invalide : impossible de continuer depuis ("
+            cerr << "Chemin invalide : impossible de continuer depuis ("
                       << current.first << "," << current.second << ")\n";
             return;
         }
     }
 
-    cord_chemain.push_back(this->end); //
+    cord_chemain.push_back(this->end); 
 }
 

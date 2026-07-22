@@ -1,7 +1,7 @@
 #include"Enemy.hpp"
-Enemy::Enemy(){}
+int Enemy::next_id = 0;
 Enemy::Enemy(float h, float l, float hp, float speed, std::pair<float, float> start)
-    : hp(hp), speed(speed)
+    : hp(hp), speed(speed) , id(next_id++)
 {
     this->taille = {l, h}; // length (width), height
     this->cord = start;    // x, y position

@@ -1,6 +1,6 @@
 #include "GameRender.hpp"
 
-GameRender::GameRender(Grid g, vector <Tower> Towers , vector <Enemy> Enemys)
+GameRender::GameRender(Grid g, vector<Tower> Towers, vector<Enemy> Enemys)
     : grid(g), Towers(Towers), Enemys(Enemys) {}
 
 void GameRender::GridRender(SDL_Renderer *renderer)
@@ -43,7 +43,6 @@ void GameRender::GridRender(SDL_Renderer *renderer)
             }
         }
     }
-    SDL_RenderPresent(renderer);
 }
 
 void GameRender::EntityRender(Enemy e, SDL_Renderer *renderer)
@@ -68,20 +67,33 @@ void GameRender::TowerRender(Tower t, SDL_Renderer *renderer)
     SDL_RenderFillRect(renderer, &filledRect);
 }
 
-void GameRender::ProjectileRender( Projectile p , SDL_Renderer * renderer)
+void GameRender::ProjectileRender(Projectile p, SDL_Renderer *renderer)
 {
-SDL_Rect filledRect = {
-        static_cast<int>(p.cord.second * 100 + (100 - p.taille.first) / 2),
-        static_cast<int>(p.cord.first * 100 + (100 - p.taille.second) / 2),
-        static_cast<int>(p.taille.first),
-        static_cast<int>(p.taille.second)};
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderFillRect(renderer, &filledRect);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    float cx = (p.cord.second * 100 + (100 - p.taille.first) / 2);
+    float cy = (p.cord.first * 100 + (100 - p.taille.second) / 2);
+    float r = 10.0f;
+    const float pas = 0.1f;
+    float prevX = cx + r * cos(0.0f);
+    float prevY = cy + r * sin(0.0f);
+
+    for (float theta = pas; theta <= 2 * M_PI + pas; theta += pas)
+    {
+        float x = cx + r * cos(theta);
+        float y = cy + r * sin(theta);
+
+        SDL_RenderDrawLine(renderer,
+                           static_cast<int>(prevX), static_cast<int>(prevY),
+                           static_cast<int>(x), static_cast<int>(y));
+
+        prevX = x;
+        prevY = y;
+    }
 }
 
-void GameRender::PlayerSelectRender( InputManager i , SDL_Renderer * renderer)
+void GameRender::PlayerSelectRender(InputManager i, SDL_Renderer *renderer)
 {
-SDL_Rect filledRect = {
+    SDL_Rect filledRect = {
         static_cast<int>(i.player.second * 100 + (100 - i.playerSize) / 2),
         static_cast<int>(i.player.first * 100 + (100 - i.playerSize) / 2),
         static_cast<int>(i.playerSize),
