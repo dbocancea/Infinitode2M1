@@ -40,9 +40,6 @@ void GameRender::GridRender(SDL_Renderer *renderer)
 
                 SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
                 SDL_RenderFillRect(renderer, &filledRect);
-
-                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); 
-                SDL_RenderDrawRect(renderer, &filledRect);
             }
         }
     }
@@ -80,4 +77,15 @@ SDL_Rect filledRect = {
         static_cast<int>(p.taille.second)};
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderFillRect(renderer, &filledRect);
+}
+
+void GameRender::PlayerSelectRender( InputManager i , SDL_Renderer * renderer)
+{
+SDL_Rect filledRect = {
+        static_cast<int>(i.player.second * 100 + (100 - i.playerSize) / 2),
+        static_cast<int>(i.player.first * 100 + (100 - i.playerSize) / 2),
+        static_cast<int>(i.playerSize),
+        static_cast<int>(i.playerSize)};
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderDrawRect(renderer, &filledRect);
 }

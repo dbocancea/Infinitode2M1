@@ -5,6 +5,7 @@
 #include "Enemy.hpp"
 #include "Tower.hpp"
 #include "Projectile.hpp"
+#include "InputManager.hpp"
 #include <vector>
 #include <map>
 class GameRender
@@ -20,6 +21,7 @@ public:
     void EntityRender(Enemy e , SDL_Renderer* renderer);
     void TowerRender(Tower t , SDL_Renderer* renderer);
     void ProjectileRender( Projectile p , SDL_Renderer * renderer);
+    void PlayerSelectRender( InputManager i , SDL_Renderer* renderer );
 };
 
 #endif
