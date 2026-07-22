@@ -64,8 +64,17 @@ int main(int argc, char *argv[])
         input.GestionClavier(&running, &creer_tour);
         if (creer_tour)
         {
-            Tower t(5, 10, 2, input.player, 75, 75);
-            tours.push_back(t);
+            for( int h = 0; h<maGrille.towers.size() ; h++ )
+            {
+                if( (input.player.first == maGrille.towers[h].first.first) && 
+                    (input.player.second == maGrille.towers[h].first.second) &&
+                    !maGrille.towers[h].second)
+                {
+                    Tower t(5, 10, 2, input.player, 75, 75);
+                    tours.push_back(t);
+                }
+            }
+            
         }
         for (int i = 0; i < enemys.size(); i++)
         {

@@ -86,3 +86,4 @@ void Grid::CalculerChaiman()
 
     cord_chemain.push_back(this->end); //
 }
+
