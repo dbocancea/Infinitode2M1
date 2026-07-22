@@ -10,7 +10,7 @@ class Projectile : public Entity
         int index;
         Projectile(pair<float , float> cord , pair<float , float> target , float speed , pair<float , float> taille , int index );
         void UpdateCord(pair<float , float> nCord);
-        void Move();
+        void Move(bool* touch);
 };
 
 #endif

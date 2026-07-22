@@ -5,6 +5,7 @@
 #include "GameRender.hpp"
 #include "Enemy.hpp"
 #include <unistd.h>
+#include "InputManager.hpp"
 #include "Projectile.hpp"
 int main(int argc, char *argv[])
 {
@@ -41,26 +42,32 @@ int main(int argc, char *argv[])
     maGrille.CalculerChaiman();
     GameRender gameRender(maGrille, tours, ennemis);
 
-    Enemy e(50, 50, 100, 0.01f, maGrille.start);
+    Enemy e(50, 50, 10, 0.01f, maGrille.start);
 
     vector<Enemy> enemys;
     enemys.push_back(e);
 
-    Tower t(100, 10, 1, {1, 4}, 75, 75);
+    Tower t(100, 10, 2, {1, 4}, 75, 75);
     tours.push_back(t);
     bool running = true;
     SDL_Event event;
     vector<int> parc = {0};
     int time;
+    int second_time;
     while (running)
     {   
         Uint32 elapsed = SDL_GetTicks() - startTime;
         time = elapsed / 1000;
+            
         while (SDL_PollEvent(&event))
         {
             if (event.type == SDL_QUIT)
                 running = false;
         }
+        int nbk;
+        const Uint8* keys = SDL_GetKeyboardState(&nbk);
+        InputManager input(keys , nbk);
+        input.GestionClavier(&running);
         for (int i = 0; i < enemys.size(); i++)
         {
             if (parc[i] < maGrille.cord_chemain.size())
@@ -91,23 +98,34 @@ int main(int argc, char *argv[])
         }
 
         int index = t.Find(enemys);
-        if (index != -1)
+        if (index != -1 && (time%2==0) && (time!=second_time))
         {
             Projectile p(t.cord, enemys[index].cord, 0.05f, {20, 20} , index);
             projectiles.push_back(p);
         }
-
+       
         for (int i = 0; i < projectiles.size(); i++)
         {
-            projectiles[i].Move();
+            bool touch = false;
+            auto it = find(enemys.begin() , enemys.end() , enemys[ projectiles[i].index] );
+            if( it == enemys.end() )
+                projectiles.erase(projectiles.begin() + i);
+            projectiles[i].Move(&touch);
             projectiles[i].UpdateCord(enemys[ projectiles[i].index].cord);
+            if( touch)
+                enemys[ projectiles[i].index].hp-=t.attack;
         }
             
 
         gameRender.GridRender(renderer);
 
-        for (auto &enemy : enemys)
-            gameRender.EntityRender(enemy, renderer);
+        for (int k = 0; k<enemys.size() ; k++ )
+        {
+            if( enemys[k].hp <=0 )
+                enemys.erase(enemys.begin()+ k );
+            gameRender.EntityRender(enemys[k], renderer);
+        }
+            
 
         for (auto &tw : tours)
             gameRender.TowerRender(tw, renderer);
@@ -117,6 +135,11 @@ int main(int argc, char *argv[])
 
         SDL_RenderPresent(renderer);
         SDL_Delay(32);
+        if (time != second_time)
+        {
+            second_time= time;
+            cout << "Time: " << time << endl;
+        }
     }
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

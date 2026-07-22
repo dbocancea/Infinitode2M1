@@ -12,14 +12,17 @@ void Projectile::UpdateCord(pair<float, float> nCord)
     this->target = nCord;
 }
 
-void Projectile::Move()
+void Projectile::Move(bool *touch)
 {
-    float diffY = target.first  - cord.first;
+    float diffY = target.first - cord.first;
     float diffX = target.second - cord.second;
 
     int dirY = (diffY > 0) - (diffY < 0);
     int dirX = (diffX > 0) - (diffX < 0);
 
-    cord.first  += dirY * speed;
+    cord.first += dirY * speed;
     cord.second += dirX * speed;
+
+    if (abs(diffX) < 0.05f && abs(diffY) < 0.05f)
+        *touch = true;
 }

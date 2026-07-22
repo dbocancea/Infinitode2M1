@@ -5,6 +5,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Infinitode2D.dir/src/GameRender.cpp.o.d"
   "CMakeFiles/Infinitode2D.dir/src/Grid.cpp.o"
   "CMakeFiles/Infinitode2D.dir/src/Grid.cpp.o.d"
+  "CMakeFiles/Infinitode2D.dir/src/InputManager.cpp.o"
+  "CMakeFiles/Infinitode2D.dir/src/InputManager.cpp.o.d"
   "CMakeFiles/Infinitode2D.dir/src/Projectile.cpp.o"
   "CMakeFiles/Infinitode2D.dir/src/Projectile.cpp.o.d"
   "CMakeFiles/Infinitode2D.dir/src/Tower.cpp.o"

@@ -14,6 +14,7 @@ add_executable(${PROJECT_NAME}
     src/Enemy.cpp
     src/Tower.cpp
     src/Projectile.cpp
+    src/InputManager.cpp
 )
 
 # 4. Configuration de l'exécutable

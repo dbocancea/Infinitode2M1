@@ -201,6 +201,30 @@ src/Grid.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infinitode2D.dir/build.make CMakeFiles/Infinitode2D.dir/src/Grid.cpp.s
 .PHONY : src/Grid.cpp.s
 
+src/InputManager.o: src/InputManager.cpp.o
+.PHONY : src/InputManager.o
+
+# target to build an object file
+src/InputManager.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infinitode2D.dir/build.make CMakeFiles/Infinitode2D.dir/src/InputManager.cpp.o
+.PHONY : src/InputManager.cpp.o
+
+src/InputManager.i: src/InputManager.cpp.i
+.PHONY : src/InputManager.i
+
+# target to preprocess a source file
+src/InputManager.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infinitode2D.dir/build.make CMakeFiles/Infinitode2D.dir/src/InputManager.cpp.i
+.PHONY : src/InputManager.cpp.i
+
+src/InputManager.s: src/InputManager.cpp.s
+.PHONY : src/InputManager.s
+
+# target to generate assembly for a file
+src/InputManager.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infinitode2D.dir/build.make CMakeFiles/Infinitode2D.dir/src/InputManager.cpp.s
+.PHONY : src/InputManager.cpp.s
+
 src/Projectile.o: src/Projectile.cpp.o
 .PHONY : src/Projectile.o
 
@@ -291,6 +315,9 @@ help:
 	@echo "... src/Grid.o"
 	@echo "... src/Grid.i"
 	@echo "... src/Grid.s"
+	@echo "... src/InputManager.o"
+	@echo "... src/InputManager.i"
+	@echo "... src/InputManager.s"
 	@echo "... src/Projectile.o"
 	@echo "... src/Projectile.i"
 	@echo "... src/Projectile.s"
