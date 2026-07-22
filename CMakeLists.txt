@@ -24,3 +24,4 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ${SDL2_LIBRARIES})
 
 # 5. Copie du fichier de carte (Attention : ton fichier s'appelle chem.txt et est dans sprites/)
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/sprites/chem.txt DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/sprites/tower1.bmp DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)

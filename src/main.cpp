@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     vector<Enemy> enemys;
 
     GameRender gameRender(maGrille, tours, ennemis);
-
+    gameRender.LoadTextures(renderer); 
     bool running = true;
     SDL_Event event;
     vector<int> parc = {0};

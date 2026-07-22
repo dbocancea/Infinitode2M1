@@ -16,6 +16,10 @@ public:
     Grid grid;
     vector <Tower> Towers;
     vector <Enemy> Enemys;
+    SDL_Texture* towerTexture = nullptr;
+    ~GameRender();                          // <-- pour libérer la texture
+
+    void LoadTextures(SDL_Renderer* renderer); // <-- nouveau
     GameRender(Grid g , vector <Tower> Towers , vector <Enemy> Enemys);
     void GridRender(SDL_Renderer* renderer);
     void EntityRender(Enemy e , SDL_Renderer* renderer);

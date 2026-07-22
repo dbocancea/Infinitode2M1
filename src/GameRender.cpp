@@ -44,6 +44,27 @@ void GameRender::GridRender(SDL_Renderer *renderer)
         }
     }
 }
+GameRender::~GameRender()
+{
+    if (towerTexture) SDL_DestroyTexture(towerTexture);
+}
+
+void GameRender::LoadTextures(SDL_Renderer* renderer)
+{
+    SDL_Surface* surface = SDL_LoadBMP("../sprites/tower1.bmp");
+    if (!surface)
+    {
+        std::cerr << "Erreur chargement BMP tour: " << SDL_GetError() << std::endl;
+        return;
+    }
+
+    // Rend transparente la couleur du pixel en haut à gauche (le "fond")
+    Uint32 colorKey = SDL_MapRGB(surface->format, 255, 255, 255); // adapte à la couleur de fond de ton BMP
+    SDL_SetColorKey(surface, SDL_TRUE, colorKey);
+
+    towerTexture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+}
 
 void GameRender::EntityRender(Enemy e, SDL_Renderer *renderer)
 {
@@ -58,13 +79,22 @@ void GameRender::EntityRender(Enemy e, SDL_Renderer *renderer)
 
 void GameRender::TowerRender(Tower t, SDL_Renderer *renderer)
 {
-    SDL_Rect filledRect = {
+    SDL_Rect destRect = {
         static_cast<int>(t.cord.second * 100 + (100 - t.taille.first) / 2),
         static_cast<int>(t.cord.first * 100 + (100 - t.taille.second) / 2),
         static_cast<int>(t.taille.first),
         static_cast<int>(t.taille.second)};
-    SDL_SetRenderDrawColor(renderer, 51, 0, 102, 255);
-    SDL_RenderFillRect(renderer, &filledRect);
+
+    if (towerTexture)
+    {
+        SDL_RenderCopy(renderer, towerTexture, nullptr, &destRect);
+    }
+    else
+    {
+        // Repli si la texture n'a pas pu être chargée
+        SDL_SetRenderDrawColor(renderer, 51, 0, 102, 255);
+        SDL_RenderFillRect(renderer, &destRect);
+    }
 }
 
 void GameRender::ProjectileRender(Projectile p, SDL_Renderer *renderer)
