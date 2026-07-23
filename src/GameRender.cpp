@@ -3,6 +3,20 @@
 GameRender::GameRender(Grid g, vector<Tower> Towers, vector<Enemy> Enemys)
     : grid(g), Towers(Towers), Enemys(Enemys) {}
 
+static void DrawThickRect(SDL_Renderer *renderer, const SDL_Rect &rect, int thickness)
+{
+    SDL_Rect top    = { rect.x, rect.y, rect.w, thickness };
+    SDL_Rect bottom = { rect.x, rect.y + rect.h - thickness, rect.w, thickness };
+    SDL_Rect left   = { rect.x, rect.y, thickness, rect.h };
+    SDL_Rect right  = { rect.x + rect.w - thickness, rect.y, thickness, rect.h };
+ 
+    SDL_RenderFillRect(renderer, &top);
+    SDL_RenderFillRect(renderer, &bottom);
+    SDL_RenderFillRect(renderer, &left);
+    SDL_RenderFillRect(renderer, &right);
+}
+
+
 void GameRender::GridRender(SDL_Renderer *renderer)
 {
     SDL_RenderClear(renderer);
@@ -43,7 +57,7 @@ void GameRender::GridRender(SDL_Renderer *renderer)
                 SDL_RenderFillRect(renderer, &filledRect);
             }
             SDL_SetRenderDrawColor(renderer, 30, 30, 30, 255);
-            SDL_RenderDrawRect(renderer, &filledRect);
+            DrawThickRect(renderer, filledRect, 3);
         }
     }
 }
@@ -178,5 +192,5 @@ void GameRender::PlayerSelectRender(InputManager i, SDL_Renderer *renderer)
         static_cast<int>(i.playerSize),
         static_cast<int>(i.playerSize)};
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderDrawRect(renderer, &filledRect);
+     DrawThickRect(renderer, filledRect, 5);
 }

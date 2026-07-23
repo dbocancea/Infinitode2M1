@@ -14,7 +14,7 @@ void InputManager::GestionClavier(bool *runing, bool *creer_tour)
     static Uint32 leftLastMove = 0, rightLastMove = 0, upLastMove = 0, downLastMove = 0;
 
     Uint32 now = SDL_GetTicks();
-    const Uint32 REPEAT_DELAY = 1000; // temps avant que ça commence a repeter
+    const Uint32 REPEAT_DELAY = 500; // temps avant que ça commence a repeter
     const Uint32 REPEAT_RATE = 150;   // vitesse de repetition une fois lance
 
     if (this->keys[SDL_SCANCODE_ESCAPE])
