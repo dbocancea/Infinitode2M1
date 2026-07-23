@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
                     (input.player.second == maGrille.towers[h].first.second) &&
                     !maGrille.towers[h].second)
                 {
-                    Tower t(2, 10, 2, input.player, 75, 75);
+                    Tower t(1.5, 10, 2, input.player, 75, 75);
                     maGrille.towers[h].second = true;
                     tours.push_back(t);
                     attackTimer.push_back(SDL_GetTicks());
