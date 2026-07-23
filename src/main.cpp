@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
             }
         }
 
-        if ((time % 10 == 0) && (time != second_time))
+        if ((time % 4 == 0) && (time != second_time))
         {
             Enemy en(50, 50, 100, 0.01f, maGrille.start);
             enemys.push_back(en);

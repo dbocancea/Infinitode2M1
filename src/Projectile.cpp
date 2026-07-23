@@ -23,6 +23,6 @@ void Projectile::Move(bool *touch)
     cord.first += dirY * speed;
     cord.second += dirX * speed;
 
-    if (abs(diffX) < 0.5f && abs(diffY) < 0.5f)
+    if (abs(diffX) < 0.20f && abs(diffY) < 0.20f)
         *touch = true;
 }

@@ -17,6 +17,8 @@ public:
     vector <Tower> Towers;
     vector <Enemy> Enemys;
     SDL_Texture* towerTexture = nullptr;
+    SDL_Texture* projectileTexture = nullptr;
+    SDL_Texture* enemyTexture = nullptr;
     ~GameRender();                          // <-- pour libérer la texture
 
     void LoadTextures(SDL_Renderer* renderer); // <-- nouveau

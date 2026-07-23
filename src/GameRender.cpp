@@ -14,36 +14,41 @@ void GameRender::GridRender(SDL_Renderer *renderer)
             if (this->grid.map[i][j] == this->grid.mur)
             {
 
-                SDL_SetRenderDrawColor(renderer, 0, 128, 0, 255);
+                SDL_SetRenderDrawColor(renderer, 32, 32, 32, 255);
                 SDL_RenderFillRect(renderer, &filledRect);
+                continue;
             }
             else if (this->grid.map[i][j] == this->grid.chemain)
             {
 
-                SDL_SetRenderDrawColor(renderer, 189, 183, 107, 255);
+                SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
                 SDL_RenderFillRect(renderer, &filledRect);
             }
             else if (this->grid.map[i][j] == this->grid.tour)
             {
-                SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
+                SDL_SetRenderDrawColor(renderer, 64, 64, 64, 255);
                 SDL_RenderFillRect(renderer, &filledRect);
             }
             else if (this->grid.map[i][j] == this->grid.arrive)
             {
 
-                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+                SDL_SetRenderDrawColor(renderer, 211, 47, 47, 255);
                 SDL_RenderFillRect(renderer, &filledRect);
             }
 
             else if (this->grid.map[i][j] == this->grid.depart)
             {
 
-                SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                SDL_SetRenderDrawColor(renderer, 30, 90, 200, 255);
                 SDL_RenderFillRect(renderer, &filledRect);
             }
+            SDL_SetRenderDrawColor(renderer, 30, 30, 30, 255);
+            SDL_RenderDrawRect(renderer, &filledRect);
+
         }
     }
 }
+
 GameRender::~GameRender()
 {
     if (towerTexture) SDL_DestroyTexture(towerTexture);
@@ -58,12 +63,39 @@ void GameRender::LoadTextures(SDL_Renderer* renderer)
         return;
     }
 
-    // Rend transparente la couleur du pixel en haut à gauche (le "fond")
-    Uint32 colorKey = SDL_MapRGB(surface->format, 255, 255, 255); // adapte à la couleur de fond de ton BMP
+    Uint32 colorKey = SDL_MapRGB(surface->format, 255, 255, 255); 
     SDL_SetColorKey(surface, SDL_TRUE, colorKey);
 
     towerTexture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
+
+    SDL_Surface* surface1 = SDL_LoadBMP("../sprites/enemy.bmp");
+    if (!surface1)
+    {
+        std::cerr << "Erreur chargement BMP enemy: " << SDL_GetError() << std::endl;
+        return;
+    }
+
+    Uint32 colorKey1 = SDL_MapRGB(surface1->format, 255, 255, 255); 
+    SDL_SetColorKey(surface1, SDL_TRUE, colorKey1);
+
+    enemyTexture = SDL_CreateTextureFromSurface(renderer, surface1);
+    
+    SDL_FreeSurface(surface1);
+
+    SDL_Surface* surface2 = SDL_LoadBMP("../sprites/projectile.bmp");
+    if (!surface2)
+    {
+        std::cerr << "Erreur chargement BMP enemy: " << SDL_GetError() << std::endl;
+        return;
+    }
+
+    Uint32 colorKey2 = SDL_MapRGB(surface2->format, 255, 255, 255); 
+    SDL_SetColorKey(surface2, SDL_TRUE, colorKey2);
+
+    projectileTexture = SDL_CreateTextureFromSurface(renderer, surface2);
+    
+    SDL_FreeSurface(surface2);
 }
 
 void GameRender::EntityRender(Enemy e, SDL_Renderer *renderer)
@@ -73,8 +105,15 @@ void GameRender::EntityRender(Enemy e, SDL_Renderer *renderer)
         static_cast<int>(e.cord.first * 100 + (100 - e.taille.second) / 2),
         static_cast<int>(e.taille.first),
         static_cast<int>(e.taille.second)};
-    SDL_SetRenderDrawColor(renderer, 238, 130, 238, 255);
-    SDL_RenderFillRect(renderer, &filledRect);
+    if (enemyTexture)
+    {
+        SDL_RenderCopy(renderer, enemyTexture, nullptr, &filledRect);
+    }
+    else
+    {
+        SDL_SetRenderDrawColor(renderer, 238, 130, 238, 255);
+        SDL_RenderFillRect(renderer, &filledRect);
+    }
 }
 
 void GameRender::TowerRender(Tower t, SDL_Renderer *renderer)
@@ -91,7 +130,6 @@ void GameRender::TowerRender(Tower t, SDL_Renderer *renderer)
     }
     else
     {
-        // Repli si la texture n'a pas pu être chargée
         SDL_SetRenderDrawColor(renderer, 51, 0, 102, 255);
         SDL_RenderFillRect(renderer, &destRect);
     }
@@ -99,25 +137,20 @@ void GameRender::TowerRender(Tower t, SDL_Renderer *renderer)
 
 void GameRender::ProjectileRender(Projectile p, SDL_Renderer *renderer)
 {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    float cx = (p.cord.second * 100 + (100 - p.taille.first) / 2);
-    float cy = (p.cord.first * 100 + (100 - p.taille.second) / 2);
-    float r = 10.0f;
-    const float pas = 0.1f;
-    float prevX = cx + r * cos(0.0f);
-    float prevY = cy + r * sin(0.0f);
+    SDL_Rect destRect = {
+        static_cast<int>(p.cord.second * 100 + (100 - p.taille.first) / 2),
+        static_cast<int>(p.cord.first * 100 + (100 - p.taille.second) / 2),
+        static_cast<int>(p.taille.first),
+        static_cast<int>(p.taille.second)};
 
-    for (float theta = pas; theta <= 2 * M_PI + pas; theta += pas)
+    if (projectileTexture)
     {
-        float x = cx + r * cos(theta);
-        float y = cy + r * sin(theta);
-
-        SDL_RenderDrawLine(renderer,
-                           static_cast<int>(prevX), static_cast<int>(prevY),
-                           static_cast<int>(x), static_cast<int>(y));
-
-        prevX = x;
-        prevY = y;
+        SDL_RenderCopy(renderer, projectileTexture, nullptr, &destRect);
+    }
+    else
+    {
+        SDL_SetRenderDrawColor(renderer, 51, 0, 102, 255);
+        SDL_RenderFillRect(renderer, &destRect);
     }
 }
 
