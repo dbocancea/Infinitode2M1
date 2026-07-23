@@ -44,57 +44,57 @@ void GameRender::GridRender(SDL_Renderer *renderer)
             }
             SDL_SetRenderDrawColor(renderer, 30, 30, 30, 255);
             SDL_RenderDrawRect(renderer, &filledRect);
-
         }
     }
 }
 
 GameRender::~GameRender()
 {
-    if (towerTexture) SDL_DestroyTexture(towerTexture);
+    if (towerTexture)
+        SDL_DestroyTexture(towerTexture);
 }
 
-void GameRender::LoadTextures(SDL_Renderer* renderer)
+void GameRender::LoadTextures(SDL_Renderer *renderer)
 {
-    SDL_Surface* surface = SDL_LoadBMP("../sprites/tower1.bmp");
+    SDL_Surface *surface = SDL_LoadBMP("../sprites/tower1.bmp");
     if (!surface)
     {
         std::cerr << "Erreur chargement BMP tour: " << SDL_GetError() << std::endl;
         return;
     }
 
-    Uint32 colorKey = SDL_MapRGB(surface->format, 255, 255, 255); 
+    Uint32 colorKey = SDL_MapRGB(surface->format, 255, 255, 255);
     SDL_SetColorKey(surface, SDL_TRUE, colorKey);
 
     towerTexture = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
 
-    SDL_Surface* surface1 = SDL_LoadBMP("../sprites/enemy.bmp");
+    SDL_Surface *surface1 = SDL_LoadBMP("../sprites/enemy.bmp");
     if (!surface1)
     {
         std::cerr << "Erreur chargement BMP enemy: " << SDL_GetError() << std::endl;
         return;
     }
 
-    Uint32 colorKey1 = SDL_MapRGB(surface1->format, 255, 255, 255); 
+    Uint32 colorKey1 = SDL_MapRGB(surface1->format, 255, 255, 255);
     SDL_SetColorKey(surface1, SDL_TRUE, colorKey1);
 
     enemyTexture = SDL_CreateTextureFromSurface(renderer, surface1);
-    
+
     SDL_FreeSurface(surface1);
 
-    SDL_Surface* surface2 = SDL_LoadBMP("../sprites/projectile.bmp");
+    SDL_Surface *surface2 = SDL_LoadBMP("../sprites/projectile.bmp");
     if (!surface2)
     {
         std::cerr << "Erreur chargement BMP enemy: " << SDL_GetError() << std::endl;
         return;
     }
 
-    Uint32 colorKey2 = SDL_MapRGB(surface2->format, 255, 255, 255); 
+    Uint32 colorKey2 = SDL_MapRGB(surface2->format, 255, 255, 255);
     SDL_SetColorKey(surface2, SDL_TRUE, colorKey2);
 
     projectileTexture = SDL_CreateTextureFromSurface(renderer, surface2);
-    
+
     SDL_FreeSurface(surface2);
 }
 
@@ -126,7 +126,23 @@ void GameRender::TowerRender(Tower t, SDL_Renderer *renderer)
 
     if (towerTexture)
     {
-        SDL_RenderCopy(renderer, towerTexture, nullptr, &destRect);
+        int row = static_cast<int>(t.cord.first);
+        int col = static_cast<int>(t.cord.second);
+
+        double angle = 0.0;
+
+        bool bas = (row + 1 < 10 && this->grid.map[row + 1][col] == this->grid.chemain);
+        bool droite = (col + 1 < 10 && this->grid.map[row][col + 1] == this->grid.chemain);
+        bool gauche = (col - 1 >= 0 && this->grid.map[row][col - 1] == this->grid.chemain);
+
+        if (bas)
+            angle = 180.0;
+        else if (droite)
+            angle = 90.0;
+        else if (gauche)
+            angle = -90.0;
+
+        SDL_RenderCopyEx(renderer, towerTexture, nullptr, &destRect, angle, nullptr, SDL_FLIP_NONE);
     }
     else
     {

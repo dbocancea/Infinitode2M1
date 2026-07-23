@@ -1,6 +1,6 @@
 #include "Projectile.hpp"
 
-Projectile::Projectile(pair<float, float> cord, pair<float, float> target, float speed, pair<float, float> taille, int index , Tower t ) : speed(speed), targetId(index) , t(t)
+Projectile::Projectile(pair<float, float> cord, pair<float, float> target, float speed, pair<float, float> taille, int index, Tower t) : speed(speed), targetId(index), t(t)
 {
     this->cord = cord;
     this->target = target;

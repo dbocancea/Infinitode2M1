@@ -75,14 +75,13 @@ void Grid::CalculerChaiman()
             }
         }
 
-        if (!found) 
+        if (!found)
         {
             cerr << "Chemin invalide : impossible de continuer depuis ("
-                      << current.first << "," << current.second << ")\n";
+                 << current.first << "," << current.second << ")\n";
             return;
         }
     }
 
-    cord_chemain.push_back(this->end); 
+    cord_chemain.push_back(this->end);
 }
-

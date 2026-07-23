@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     vector<Enemy> enemys;
 
     GameRender gameRender(maGrille, tours, ennemis);
-    gameRender.LoadTextures(renderer); 
+    gameRender.LoadTextures(renderer);
     bool running = true;
     SDL_Event event;
     vector<int> parc = {0};
@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
     int nbk;
     const Uint8 *keys = SDL_GetKeyboardState(&nbk);
     InputManager input(keys, nbk, maGrille.start);
+    vector<Uint32> attackTimer;
     while (running)
     {
         Uint32 elapsed = SDL_GetTicks() - startTime;
@@ -78,6 +79,7 @@ int main(int argc, char *argv[])
                     Tower t(2, 10, 2, input.player, 75, 75);
                     maGrille.towers[h].second = true;
                     tours.push_back(t);
+                    attackTimer.push_back(SDL_GetTicks());
                 }
             }
         }
@@ -117,14 +119,15 @@ int main(int argc, char *argv[])
             enemys.push_back(en);
             parc.push_back(0);
         }
-
-        for (auto &tw : tours)
+        Uint32 now = SDL_GetTicks();
+        for (int l = 0; l < tours.size(); l++)
         {
-            int index = tw.Find(enemys);
-            if (index != -1 && (time % 2 == 0) && (time != second_time))
+            int index = tours[l].Find(enemys);
+            if (index != -1 && now - attackTimer[l] >= tours[l].attack_speed * 1000)
             {
-                Projectile p(tw.cord, enemys[index].cord, 0.05f, {20, 20}, enemys[index].id, tw);
+                Projectile p(tours[l].cord, enemys[index].cord, 0.05f, {20, 20}, enemys[index].id, tours[l]);
                 projectiles.push_back(p);
+                attackTimer[l] = now;
             }
         }
 
@@ -152,8 +155,8 @@ int main(int argc, char *argv[])
                 continue;
             }
         }
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); 
-        
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
         // 2. ON EFFACE L'ÉCRAN (C'est la ligne qui vous manque !)
         SDL_RenderClear(renderer);
         gameRender.GridRender(renderer);
